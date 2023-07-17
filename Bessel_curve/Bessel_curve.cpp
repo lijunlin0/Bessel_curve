@@ -13,13 +13,13 @@ COLORREF value_to_color(int value)
 {
 	switch (value)
 	{
-	case 1:return GREEN;
-	case 2:return RED;
-	case 3:return CYAN;
+	case 1:return LIGHTGREEN;
+	case 2:return LIGHTRED;
+	case 3:return LIGHTCYAN;
 	case 4:return YELLOW;
 	case 5:return BROWN;
-	case 6:return MAGENTA;
-	case 7:return BLUE;
+	case 6:return LIGHTMAGENTA;
+	case 7:return LIGHTBLUE;
 	default:return CYAN;
 	}
 }
@@ -40,7 +40,7 @@ void initial(vector<pair<float, float>> points,vector<Line> Lines)
 		solidcircle(points[i].first, points[i].second, 5);//ÆðÊ¼µã
 		if (i <= Lines.size()-1)
 		{
-			setlinecolor(MAGENTA);
+			setlinecolor(YELLOW);
 			setlinestyle(PS_ENDCAP_FLAT, 1);
 			Lines[i].draw();
 		}
@@ -53,13 +53,15 @@ void draw(float scale, vector<pair<float, float>> initial_points, vector<Line> i
 	setlinecolor(value_to_color(color));
 	if (Lines.size() == 1)
 	{
-		for (int i = 0; i < (points->size()-1); i++)
-		{
-			setlinestyle(PS_ENDCAP_FLAT,3);
-			line(points->at(i).first, points->at(i).second, points->at(i + 1).first, points->at(i + 1).second);
-		}
 		pair<float, float> p = Lines[0].get_point(scale);
 		points->push_back(p);
+		for (int i = 0; i < points->size() - 1; i++)
+		{
+			setlinecolor(WHITE);
+			setlinestyle(PS_ENDCAP_FLAT,5);
+			line(points->at(i).first, points->at(i).second, points->at(i + 1).first, points->at(i + 1).second);
+		}
+		
 	}
 	else
 	{
@@ -97,6 +99,7 @@ int main()
 			points_draw.clear();
 			scale = 0;
 			pair<float, float> p(msg.x, msg.y);
+			setfillcolor(BROWN);
 			solidcircle(p.first, p.second, 5);
 			points.push_back(p);
 			Lines.clear();
@@ -108,7 +111,7 @@ int main()
 					Line l(points[i].first, points[i].second, points[i + 1].first, points[i + 1].second);
 					Lines.push_back(l);
 				}
-			}	
+			}
 		}
 		if (points.size() >= 3)
 		{
@@ -128,10 +131,13 @@ int main()
 			EndBatchDraw();
 
 			scale += 0.005;
-			if (scale >= 1) scale = 0;
-			cout << scale << ' ' << points.size() << endl;
+			if (scale >= 1)
+			{
+				scale = 0;
+				points_draw.clear();
+			}
+
 		}
-		
 	}
 	return 0;
 }

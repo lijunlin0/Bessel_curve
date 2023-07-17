@@ -5,7 +5,7 @@ class Time
 {
 public:
 	static long long UpdateMS;
-	static const long long FrameMS = 17;
+	static const long long FrameMS = 5;
 
 	static long long CurrentTime()
 	{
